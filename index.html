@@ -28,7 +28,12 @@
     </header>
 
     <div class="container mx-auto p-4">
-        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-6">
+            <div class="bg-green-800 text-white p-3 rounded-lg shadow col-span-2 lg:col-span-1 border-b-4 border-yellow-400">
+                <p class="text-[9px] opacity-70">TOTAL PENJUALAN</p>
+                <p id="s-total-penjualan" class="text-sm font-bold">Rp 0</p>
+            </div>
+            
             <div class="bg-blue-800 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">TUNAI</p><p id="s-tunai" class="text-sm font-bold">Rp 0</p></div>
             <div class="bg-blue-700 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">BRI</p><p id="s-bri" class="text-sm font-bold">Rp 0</p></div>
             <div class="bg-blue-600 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">MANDIRI</p><p id="s-mandiri" class="text-sm font-bold">Rp 0</p></div>
@@ -143,11 +148,17 @@
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
+                
+                // Update Dashboard Per Akun
                 document.getElementById('s-tunai').innerText = "Rp " + data.tunai.toLocaleString();
                 document.getElementById('s-bri').innerText = "Rp " + data.bri.toLocaleString();
                 document.getElementById('s-mandiri').innerText = "Rp " + data.mandiri.toLocaleString();
                 document.getElementById('s-dana').innerText = "Rp " + data.dana.toLocaleString();
                 document.getElementById('s-keluar').innerText = "Rp " + data.pengeluaran.toLocaleString();
+
+                // Hitung dan Update Total Penjualan (Akumulasi Saldo Masuk)
+                const totalJual = data.tunai + data.bri + data.mandiri + data.dana;
+                document.getElementById('s-total-penjualan').innerText = "Rp " + totalJual.toLocaleString();
 
                 DB_STOK = data.listBarang;
                 const sel = document.getElementById('pilih_barang');
@@ -172,7 +183,6 @@
             }
         }
 
-        // FUNGSI CLEARANCE UNTUK RESET FORM
         function clearFormKasir() {
             document.getElementById('jual_pembeli').value = "";
             document.getElementById('pilih_barang').value = "";
@@ -202,7 +212,7 @@
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
                 alert("Stok Berhasil Ditambah!");
-                clearFormStok(); // Aktifkan Clearance
+                clearFormStok();
                 refreshData();
             } catch (e) { alert("Gagal!"); }
             btn.disabled = false;
@@ -236,7 +246,7 @@
                     <div style="font-size:7pt; margin-top:5px;">Bayar: ${metode}</div>
                 `;
                 window.print();
-                clearFormKasir(); // Aktifkan Clearance
+                clearFormKasir();
                 refreshData();
             } catch (e) { alert("Gagal Simpan!"); }
             btn.disabled = false;
@@ -245,4 +255,3 @@
     </script>
 </body>
 </html>
-
