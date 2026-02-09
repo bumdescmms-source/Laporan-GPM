@@ -45,7 +45,7 @@
         <div id="penjualan" class="tab-content active space-y-4">
             <div class="bg-white p-6 rounded-xl shadow-sm border">
                 <h2 class="font-bold text-blue-600 mb-4 uppercase text-sm">🛒 Kasir Penjualan</h2>
-                <div class="space-y-4">
+                <div class="space-y-4" id="form-kasir">
                     <div>
                         <label class="text-[10px] font-bold text-gray-400">NAMA PEMBELI</label>
                         <input type="text" id="jual_pembeli" placeholder="Nama Pelanggan / Umum" class="w-full p-3 border rounded-lg font-bold uppercase">
@@ -85,7 +85,7 @@
         <div id="stok" class="tab-content space-y-4">
             <div class="bg-white p-6 rounded-xl shadow-sm border">
                 <h2 class="font-bold text-green-600 mb-4 uppercase text-sm">📦 Tambah Stok Barang</h2>
-                <div class="grid gap-4">
+                <div class="grid gap-4" id="form-stok">
                     <input type="text" id="in_nama" placeholder="Nama Barang/Jasa" class="border p-3 rounded-lg font-bold">
                     <div class="grid grid-cols-3 gap-2">
                         <input type="number" id="in_beli" placeholder="Hrg Beli" class="border p-3 rounded-lg">
@@ -121,12 +121,12 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZaGKWF5q3K35VUeVglVzkBdqrciA-a2Yttj-KurEXqWXetW-PTWTEtQdQWwMNTqHQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSiqEMZnte1tWkP7qqUrn7bi19p8v_iHfz2JLf_rRZ-345uXU1kVURsKip-YiUrFw9/exec";
         let DB_STOK = [];
 
         window.onload = function() {
             const pass = prompt("Password Akses:");
-            if(pass !== "cmmsc26") {
+            if(pass !== "123") {
                 alert("Salah!");
                 document.body.innerHTML = "Akses Ditolak";
             } else {
@@ -172,19 +172,41 @@
             }
         }
 
+        // FUNGSI CLEARANCE UNTUK RESET FORM
+        function clearFormKasir() {
+            document.getElementById('jual_pembeli').value = "";
+            document.getElementById('pilih_barang').value = "";
+            document.getElementById('jual_harga').value = "";
+            document.getElementById('jual_qty').value = "1";
+            document.getElementById('jual_total_tampil').value = "Rp 0";
+        }
+
+        function clearFormStok() {
+            document.getElementById('in_nama').value = "";
+            document.getElementById('in_beli').value = "";
+            document.getElementById('in_jual').value = "";
+            document.getElementById('in_qty').value = "";
+        }
+
         async function simpanBarang() {
             const btn = document.getElementById('btnStok');
             const payload = {
                 target: "Barang",
                 values: [new Date().toLocaleDateString('id-ID'), document.getElementById('in_nama').value, document.getElementById('in_beli').value, document.getElementById('in_jual').value, "Admin", document.getElementById('in_qty').value]
             };
+            
+            if(!payload.values[1]) return alert("Nama barang kosong!");
+
             btn.disabled = true;
+            btn.innerText = "MENYIMPAN...";
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-                alert("Tersimpan!");
+                alert("Stok Berhasil Ditambah!");
+                clearFormStok(); // Aktifkan Clearance
                 refreshData();
             } catch (e) { alert("Gagal!"); }
             btn.disabled = false;
+            btn.innerText = "SIMPAN KE STOK";
         }
 
         async function prosesJual() {
@@ -199,8 +221,9 @@
             if(!barang || qty < 1) return alert("Pilih barang!");
 
             btn.disabled = true;
+            btn.innerText = "SEDANG MEMPROSES...";
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload = {
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({
                     target: "Penjualan",
                     values: [new Date().toLocaleString('id-ID'), "INV-"+Date.now(), barang, total, metode, "Lunas", qty, pembeli]
                 })});
@@ -213,12 +236,12 @@
                     <div style="font-size:7pt; margin-top:5px;">Bayar: ${metode}</div>
                 `;
                 window.print();
-                document.getElementById('jual_pembeli').value = "";
+                clearFormKasir(); // Aktifkan Clearance
                 refreshData();
-            } catch (e) { alert("Gagal!"); }
+            } catch (e) { alert("Gagal Simpan!"); }
             btn.disabled = false;
+            btn.innerText = "PROSES & CETAK STRUK";
         }
     </script>
 </body>
 </html>
-
