@@ -265,6 +265,15 @@
                 btn.classList.replace('bg-gray-400', 'bg-blue-600');
             }
         }
+        // Tambahkan ini di bagian paling atas script Bapak
+var password_benar = "cmmsc26"; // Silakan ganti dengan password pilihan Bapak
+var pass_input = prompt("Masukkan Password untuk Mengakses Aplikasi:");
+
+if (pass_input != password_benar) {
+    alert("Password Salah! Anda tidak diperbolehkan mengakses halaman ini.");
+    document.body.innerHTML = "<h1>Akses Ditolak</h1>"; // Menghapus tampilan jika salah
+}
     </script>
 </body>
+
 </html>
