@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUMDes CMMS - Solusi Terpadu</title>
+    <title>BUMDes CMMS - Kasir Terpadu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print { 
@@ -29,49 +29,48 @@
 
     <div class="container mx-auto p-4">
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
-            <div class="bg-blue-800 text-white p-3 rounded-lg shadow">
-                <p class="text-[9px] uppercase opacity-70">Tunai</p>
-                <p id="s-tunai" class="text-sm font-bold">Rp 0</p>
-            </div>
-            <div class="bg-blue-700 text-white p-3 rounded-lg shadow">
-                <p class="text-[9px] uppercase opacity-70">BRI</p>
-                <p id="s-bri" class="text-sm font-bold">Rp 0</p>
-            </div>
-            <div class="bg-blue-600 text-white p-3 rounded-lg shadow">
-                <p class="text-[9px] uppercase opacity-70">Mandiri</p>
-                <p id="s-mandiri" class="text-sm font-bold">Rp 0</p>
-            </div>
-            <div class="bg-blue-500 text-white p-3 rounded-lg shadow">
-                <p class="text-[9px] uppercase opacity-70">DANA</p>
-                <p id="s-dana" class="text-sm font-bold">Rp 0</p>
-            </div>
-            <div class="bg-red-600 text-white p-3 rounded-lg shadow col-span-2 lg:col-span-1">
-                <p class="text-[9px] uppercase opacity-70">Total Pengeluaran</p>
-                <p id="s-keluar" class="text-sm font-bold">Rp 0</p>
-            </div>
+            <div class="bg-blue-800 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">TUNAI</p><p id="s-tunai" class="text-sm font-bold">Rp 0</p></div>
+            <div class="bg-blue-700 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">BRI</p><p id="s-bri" class="text-sm font-bold">Rp 0</p></div>
+            <div class="bg-blue-600 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">MANDIRI</p><p id="s-mandiri" class="text-sm font-bold">Rp 0</p></div>
+            <div class="bg-blue-500 text-white p-3 rounded-lg shadow"><p class="text-[9px] opacity-70">DANA</p><p id="s-dana" class="text-sm font-bold">Rp 0</p></div>
+            <div class="bg-red-600 text-white p-3 rounded-lg shadow col-span-2 lg:col-span-1"><p class="text-[9px] opacity-70">PENGELUARAN</p><p id="s-keluar" class="text-sm font-bold">Rp 0</p></div>
         </div>
 
         <div class="flex bg-white rounded-lg shadow mb-6 overflow-hidden border">
-            <button onclick="openTab('penjualan')" class="flex-1 p-3 text-xs font-bold border-r hover:bg-gray-50 active:bg-green-50">PENJUALAN</button>
-            <button onclick="openTab('stok')" class="flex-1 p-3 text-xs font-bold border-r hover:bg-gray-50 active:bg-green-50">KELOLA STOK</button>
-            <button onclick="openTab('laporan')" class="flex-1 p-3 text-xs font-bold hover:bg-gray-50 active:bg-green-50">LAPORAN</button>
+            <button onclick="openTab('penjualan')" class="flex-1 p-3 text-xs font-bold border-r hover:bg-gray-50">KASIR</button>
+            <button onclick="openTab('stok')" class="flex-1 p-3 text-xs font-bold border-r hover:bg-gray-50">STOK</button>
+            <button onclick="openTab('laporan')" class="flex-1 p-3 text-xs font-bold hover:bg-gray-50">LAPORAN</button>
         </div>
 
         <div id="penjualan" class="tab-content active space-y-4">
             <div class="bg-white p-6 rounded-xl shadow-sm border">
-                <h2 class="font-bold text-blue-600 mb-4 tracking-tighter uppercase text-sm">🛒 Kasir Penjualan</h2>
+                <h2 class="font-bold text-blue-600 mb-4 uppercase text-sm">🛒 Kasir Penjualan</h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="text-[10px] font-bold text-gray-400">PILIH BARANG</label>
-                        <select id="pilih_barang" onchange="setHarga()" class="w-full p-3 bg-gray-50 border rounded-lg font-bold"></select>
+                        <label class="text-[10px] font-bold text-gray-400">NAMA PEMBELI</label>
+                        <input type="text" id="jual_pembeli" placeholder="Nama Pelanggan / Umum" class="w-full p-3 border rounded-lg font-bold uppercase">
                     </div>
                     <div>
-                        <label class="text-[10px] font-bold text-gray-400">HARGA JUAL</label>
-                        <input type="number" id="jual_harga" readonly class="w-full p-3 bg-yellow-50 border rounded-lg font-mono text-lg font-bold text-blue-700" placeholder="0">
+                        <label class="text-[10px] font-bold text-gray-400">PILIH BARANG</label>
+                        <select id="pilih_barang" onchange="hitungTotalJual()" class="w-full p-3 bg-gray-50 border rounded-lg font-bold"></select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-400">HARGA SATUAN</label>
+                            <input type="number" id="jual_harga" readonly class="w-full p-3 bg-gray-100 border rounded-lg font-bold text-blue-700">
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-gray-400">JUMLAH BELI</label>
+                            <input type="number" id="jual_qty" value="1" oninput="hitungTotalJual()" class="w-full p-3 border rounded-lg font-bold text-center border-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold text-gray-400">TOTAL BAYAR</label>
+                        <input type="text" id="jual_total_tampil" readonly class="w-full p-3 bg-yellow-100 border rounded-lg font-mono text-xl font-black text-blue-800" value="Rp 0">
                     </div>
                     <div>
                         <label class="text-[10px] font-bold text-gray-400">METODE PEMBAYARAN</label>
-                        <select id="metode_bayar" class="w-full p-3 border rounded-lg font-bold text-gray-700">
+                        <select id="metode_bayar" class="w-full p-3 border rounded-lg font-bold">
                             <option value="Kas Tunai">Kas Tunai</option>
                             <option value="Bank BRI">Bank BRI</option>
                             <option value="Bank Mandiri">Bank Mandiri</option>
@@ -85,28 +84,24 @@
 
         <div id="stok" class="tab-content space-y-4">
             <div class="bg-white p-6 rounded-xl shadow-sm border">
-                <h2 class="font-bold text-green-600 mb-4 uppercase text-sm">📦 Tambah Unit Barang/Jasa</h2>
+                <h2 class="font-bold text-green-600 mb-4 uppercase text-sm">📦 Tambah Stok Barang</h2>
                 <div class="grid gap-4">
-                    <input type="text" id="in_nama" placeholder="Nama Barang/Jasa" class="border p-3 rounded-lg outline-green-500">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input type="number" id="in_beli" placeholder="Harga Beli" class="border p-3 rounded-lg outline-green-500">
-                        <input type="number" id="in_jual" placeholder="Harga Jual" class="border p-3 rounded-lg outline-green-500">
+                    <input type="text" id="in_nama" placeholder="Nama Barang/Jasa" class="border p-3 rounded-lg font-bold">
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="number" id="in_beli" placeholder="Hrg Beli" class="border p-3 rounded-lg">
+                        <input type="number" id="in_jual" placeholder="Hrg Jual" class="border p-3 rounded-lg">
+                        <input type="number" id="in_qty" placeholder="Stok" class="border p-3 rounded-lg border-green-500 font-bold">
                     </div>
-                    <button onclick="simpanBarang()" id="btnStok" class="bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all">SIMPAN KE STOK</button>
+                    <button onclick="simpanBarang()" id="btnStok" class="bg-green-600 text-white py-3 rounded-lg font-bold">SIMPAN KE STOK</button>
                 </div>
             </div>
         </div>
 
         <div id="laporan" class="tab-content">
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
-                <table class="w-full text-left text-xs">
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden text-xs">
+                <table class="w-full">
                     <thead class="bg-gray-100 uppercase font-bold text-gray-600 border-b">
-                        <tr>
-                            <th class="p-3">Nama Barang</th>
-                            <th class="p-3 text-center">Masuk</th>
-                            <th class="p-3 text-center">Keluar</th>
-                            <th class="p-3 text-right">Sisa Stok</th>
-                        </tr>
+                        <tr><th class="p-3 text-left">Nama Barang</th><th class="p-3 text-center">In</th><th class="p-3 text-center">Out</th><th class="p-3 text-right">Sisa</th></tr>
                     </thead>
                     <tbody id="tabel-stok"></tbody>
                 </table>
@@ -114,23 +109,30 @@
         </div>
     </div>
 
-    <div id="struk-thermal" class="hidden font-mono text-[9pt] p-2" style="width: 58mm;">
+    <div id="struk-thermal" class="hidden font-mono text-[9pt] p-2" style="width: 58mm; line-height: 1.2;">
         <center>
-            <img src="https://i.ibb.co.com/8gjqjMfB/logo-cmmsc.jpg" style="width: 35px; margin-bottom:5px;">
-            <div style="font-weight:bold; font-size:10pt;">BUMDes CMMS</div>
+            <div style="font-weight:bold; font-size:11pt;">BUMDes CMMS</div>
             <div style="font-size:7pt">Klapanunggal, Bogor</div>
         </center>
-        <hr style="border-top: 1px dashed #000; margin: 8px 0;">
+        <hr style="border-top: 1px dashed #000; margin: 5px 0;">
         <div id="isi-struk"></div>
-        <hr style="border-top: 1px dashed #000; margin: 8px 0;">
-        <center style="font-size:7pt">WA: 082125415593<br>Terima kasih atas kunjungan Anda</center>
+        <hr style="border-top: 1px dashed #000; margin: 5px 0;">
+        <center style="font-size:7pt">Terima kasih atas kunjungan Anda</center>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzau2XMC8MlUn18nvhHG-nHUgEFFaVr2XZsLyglztNwFVzmq8_uMfgSu9srsTI8KIo/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZaGKWF5q3K35VUeVglVzkBdqrciA-a2Yttj-KurEXqWXetW-PTWTEtQdQWwMNTqHQ/exec";
         let DB_STOK = [];
 
-        window.onload = refreshData;
+        window.onload = function() {
+            const pass = prompt("Password Akses:");
+            if(pass !== "123") {
+                alert("Salah!");
+                document.body.innerHTML = "Akses Ditolak";
+            } else {
+                refreshData();
+            }
+        };
 
         function openTab(name) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -141,139 +143,81 @@
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                
-                // Update Tampilan Saldo
                 document.getElementById('s-tunai').innerText = "Rp " + data.tunai.toLocaleString();
                 document.getElementById('s-bri').innerText = "Rp " + data.bri.toLocaleString();
                 document.getElementById('s-mandiri').innerText = "Rp " + data.mandiri.toLocaleString();
                 document.getElementById('s-dana').innerText = "Rp " + data.dana.toLocaleString();
                 document.getElementById('s-keluar').innerText = "Rp " + data.pengeluaran.toLocaleString();
 
-                // Update Dropdown Kasir
                 DB_STOK = data.listBarang;
                 const sel = document.getElementById('pilih_barang');
                 sel.innerHTML = '<option value="">-- PILIH BARANG --</option>';
                 data.listBarang.forEach(b => {
-                    const sisa = b.masuk - b.keluar;
-                    sel.innerHTML += `<option value="${b.nama}">${b.nama} (Stok: ${sisa})</option>`;
+                    sel.innerHTML += `<option value="${b.nama}">${b.nama} (Stok: ${b.masuk - b.keluar})</option>`;
                 });
 
-                // Update Tabel Laporan
                 const tbody = document.getElementById('tabel-stok');
-                tbody.innerHTML = "";
-                data.listBarang.forEach(b => {
-                    const sisa = b.masuk - b.keluar;
-                    tbody.innerHTML += `
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="p-3 font-bold">${b.nama}</td>
-                            <td class="p-3 text-center">${b.masuk}</td>
-                            <td class="p-3 text-center">${b.keluar}</td>
-                            <td class="p-3 text-right ${sisa <= 2 ? 'text-red-600' : 'text-blue-600'} font-bold">${sisa}</td>
-                        </tr>`;
-                });
-            } catch (e) { console.error("Sinkronisasi gagal"); }
+                tbody.innerHTML = data.listBarang.map(b => `
+                    <tr class="border-b"><td class="p-3 font-bold">${b.nama}</td><td class="p-3 text-center">${b.masuk}</td><td class="p-3 text-center">${b.keluar}</td><td class="p-3 text-right font-bold">${b.masuk - b.keluar}</td></tr>
+                `).join('');
+            } catch (e) { console.log("Gagal sinkron"); }
         }
 
-        function setHarga() {
+        function hitungTotalJual() {
             const b = DB_STOK.find(x => x.nama == document.getElementById('pilih_barang').value);
-            if(b) document.getElementById('jual_harga').value = b.harga;
-            else document.getElementById('jual_harga').value = "";
+            const qty = document.getElementById('jual_qty').value || 0;
+            if(b) {
+                document.getElementById('jual_harga').value = b.harga;
+                document.getElementById('jual_total_tampil').value = "Rp " + (b.harga * qty).toLocaleString();
+            }
         }
 
-        // --- FUNGSI SIMPAN BARANG DENGAN CLEARANCE & ANTI-DOUBLE CLICK ---
         async function simpanBarang() {
             const btn = document.getElementById('btnStok');
-            const inNama = document.getElementById('in_nama');
-            const inBeli = document.getElementById('in_beli');
-            const inJual = document.getElementById('in_jual');
-
-            if(!inNama.value || !inBeli.value || !inJual.value) return alert("Lengkapi data barang!");
-
-            // Lock Tombol
-            btn.disabled = true;
-            btn.innerText = "⏳ Sedang Menyimpan...";
-            btn.classList.replace('bg-green-600', 'bg-gray-400');
-
             const payload = {
                 target: "Barang",
-                values: [new Date().toLocaleDateString('id-ID'), inNama.value, inBeli.value, inJual.value, "Admin"]
+                values: [new Date().toLocaleDateString('id-ID'), document.getElementById('in_nama').value, document.getElementById('in_beli').value, document.getElementById('in_jual').value, "Admin", document.getElementById('in_qty').value]
             };
-
+            btn.disabled = true;
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-                
-                // Clearance (Kosongkan Form)
-                inNama.value = "";
-                inBeli.value = "";
-                inJual.value = "";
-                
-                alert("✅ Stok barang berhasil ditambahkan!");
-                refreshData(); 
-            } catch (e) {
-                alert("❌ Gagal terhubung ke server.");
-            } finally {
-                // Unlock Tombol
-                btn.disabled = false;
-                btn.innerText = "SIMPAN KE STOK";
-                btn.classList.replace('bg-gray-400', 'bg-green-600');
-            }
+                alert("Tersimpan!");
+                refreshData();
+            } catch (e) { alert("Gagal!"); }
+            btn.disabled = false;
         }
 
-        // --- FUNGSI PROSES JUAL DENGAN CLEARANCE & ANTI-DOUBLE CLICK ---
         async function prosesJual() {
             const btn = document.getElementById('btnJual');
-            const selBarang = document.getElementById('pilih_barang');
-            const inHarga = document.getElementById('jual_harga');
-            const selMetode = document.getElementById('metode_bayar');
+            const pembeli = document.getElementById('jual_pembeli').value || "Umum";
+            const barang = document.getElementById('pilih_barang').value;
+            const harga = document.getElementById('jual_harga').value;
+            const qty = document.getElementById('jual_qty').value;
+            const metode = document.getElementById('metode_bayar').value;
+            const total = harga * qty;
 
-            if(!selBarang.value || !inHarga.value) return alert("Pilih barang/jasa!");
+            if(!barang || qty < 1) return alert("Pilih barang!");
 
-            // Lock Tombol
             btn.disabled = true;
-            btn.innerText = "⏳ Memproses...";
-            btn.classList.replace('bg-blue-600', 'bg-gray-400');
-
-            const payload = {
-                target: "Penjualan",
-                values: [new Date().toLocaleString('id-ID'), "INV-"+Date.now(), selBarang.value, inHarga.value, selMetode.value, "Lunas"]
-            };
-
             try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
-                
-                // Tampilkan Struk
+                await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload = {
+                    target: "Penjualan",
+                    values: [new Date().toLocaleString('id-ID'), "INV-"+Date.now(), barang, total, metode, "Lunas", qty, pembeli]
+                })});
+
                 document.getElementById('isi-struk').innerHTML = `
-                    <div style="display:flex; justify-content:space-between"><span>${new Date().toLocaleDateString('id-ID')}</span><span>${new Date().toLocaleTimeString('id-ID')}</span></div>
-                    <br><b>${selBarang.value}</b><br>
-                    <div style="display:flex; justify-content:space-between; margin-top:5px;"><span>TOTAL</span><span>Rp ${parseInt(inHarga.value).toLocaleString()}</span></div>
-                    <div style="font-size:8pt; margin-top:5px;">Bayar via: ${selMetode.value}</div>
+                    <div style="font-size:7pt;">ID: INV-${Date.now()}</div>
+                    <div style="font-size:7pt;">Pelanggan: ${pembeli.toUpperCase()}</div>
+                    <div style="margin:5px 0;"><b>${barang}</b><br>${qty} x Rp ${parseInt(harga).toLocaleString()}</div>
+                    <div style="display:flex; justify-content:space-between; font-weight:bold;"><span>TOTAL</span><span>Rp ${total.toLocaleString()}</span></div>
+                    <div style="font-size:7pt; margin-top:5px;">Bayar: ${metode}</div>
                 `;
-                
                 window.print();
-
-                // Clearance (Kosongkan Form)
-                selBarang.value = "";
-                inHarga.value = "";
-                
+                document.getElementById('jual_pembeli').value = "";
                 refreshData();
-            } catch (e) {
-                alert("❌ Gagal mengirim data penjualan.");
-            } finally {
-                // Unlock Tombol
-                btn.disabled = false;
-                btn.innerText = "PROSES & CETAK STRUK";
-                btn.classList.replace('bg-gray-400', 'bg-blue-600');
-            }
+            } catch (e) { alert("Gagal!"); }
+            btn.disabled = false;
         }
-        // Tambahkan ini di bagian paling atas script Bapak
-var password_benar = "cmmsc26"; // Silakan ganti dengan password pilihan Bapak
-var pass_input = prompt("Masukkan Password untuk Mengakses Aplikasi:");
-
-if (pass_input != password_benar) {
-    alert("Password Salah! Anda tidak diperbolehkan mengakses halaman ini.");
-    document.body.innerHTML = "<h1>Akses Ditolak</h1>"; // Menghapus tampilan jika salah
-}
     </script>
 </body>
-
 </html>
